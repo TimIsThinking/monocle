@@ -3,7 +3,8 @@ const mongoose = require('mongoose');
 const Server = mongoose.model('Server', { 
     name: {
         type: String,
-        required: true
+        required: true,
+        unique: true
     },
     address: {
         type: String,
