@@ -1,0 +1,32 @@
+{
+  "name": "monocle",
+  "version": "0.0.1",
+  "description": "A program controller with a RESTfull API frontend",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/13Tim37/monocle.git"
+  },
+  "author": "Tim Howard",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/13Tim37/monocle/issues"
+  },
+  "homepage": "https://github.com/13Tim37/monocle#readme",
+  "dependencies": {
+    "bcrypt": "^2.0.0",
+    "body-parser": "^1.18.2",
+    "dotenv": "^5.0.1",
+    "express": "^4.16.3",
+    "jsonwebtoken": "^8.2.1",
+    "mongoose": "^5.0.13",
+    "windows-service-controller": "^0.1.5"
+  },
+  "devDependencies": {
+    "nodemon": "^1.17.3"
+  }
+}
