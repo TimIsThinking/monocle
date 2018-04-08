@@ -1,6 +1,6 @@
 const User = require('../models/user')
 const jwt = require('jsonwebtoken')
-const bcrypt = require('bcrypt')
+const bcrypt = require('bcryptjs')
 
 exports.posts = (req, res) => {
     jwt.verify(req.token, process.env.SECRET, (err, authData) => {
