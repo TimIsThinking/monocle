@@ -3,7 +3,7 @@ const authRoutes = require('./auth')
 const userRoutes = require('./user')
 
 module.exports = function (app) {
-    app.use('/server', serverRoutes)
+    app.use('/servers', serverRoutes)
     app.use('/auth', authRoutes)
-    app.use('/user', userRoutes)
+    app.use('/users', userRoutes)
 }

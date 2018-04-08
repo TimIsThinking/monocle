@@ -1,6 +1,7 @@
-var sc = require('windows-service-controller');
+const sc = require('windows-service-controller');
+const Server = require('../models/server');
 
-exports.get_server_state = (req, res) => {
+get_server_state = (req, res) => {
   sc.query({
       // Specifies a service to query.
       name: 'Top Hat Engineers', 
@@ -16,12 +17,12 @@ exports.get_server_state = (req, res) => {
       console.log(error.message);
       res.status(400).send(error);
   })
-  .done(details => { 
+  .done(details => {
     res.status(200).json(details);
   });
 };
 
-exports.start_server = (req, res) => {
+start_server = (req, res) => {
   sc.timeout(120);
   sc.pollInterval(5);
   sc.start('Top Hat Engineers')
@@ -29,12 +30,20 @@ exports.start_server = (req, res) => {
       console.log(error.message);
       res.status(400).send(error);
   })
-  .done(details => { 
-    res.status(200).json('Server started');
+  .done(() => { 
+    console.log('Server started')
+  });
+
+  res.status(200).json({
+    message: 'Server is starting',
+    state: {
+      code: 2,
+      name: 'START_PENDING'
+    }
   });
 };
 
-exports.stop_server = (req, res) => {
+stop_server = (req, res) => {
   sc.timeout(120);
   sc.pollInterval(5);
   sc.stop('Top Hat Engineers')
@@ -43,9 +52,57 @@ exports.stop_server = (req, res) => {
       res.status(400).send(error);
   })
   .done(details => { 
-    res.status(200).json('Server stopped');
+    console.log('Server stopped')
+  });
+
+  res.status(200).json({
+    message: 'Server is stopping',
+    state: {
+      code: 3,
+      name: 'STOP_PENDING'
+    }
   });
 };
+
+create_server = (req, res) => {
+
+  const server = {
+    name: req.body.name,
+    address: req.body.address,
+    port: req.body.port
+  }
+
+  Server.create(server, (err, server) => {
+      if (err) return res.status(500).send("There was a problem adding the server to the database.");
+      res.status(200).send({
+          id: server._id,
+          name: server.name,
+          address: server.address,
+          port: server.port
+      });
+  })
+}
+
+list_servers = (req, res) => {
+
+  Server.find({}, (err, servers) => {
+      if (err) return res.status(500).send("There was a finding servers from the database.");
+      res.status(200).send(servers.map(server => ({
+          id: server._id,
+          name: server.name,
+          address: server.address,
+          port: server.port
+      })));
+  })
+}
+
+module.exports = {
+  get_server_state,
+  start_server,
+  stop_server,
+  create_server,
+  list_servers
+}
 
 // @echo off
 // set service="Top Hat Engineers"
