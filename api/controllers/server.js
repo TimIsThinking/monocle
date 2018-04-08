@@ -2,9 +2,14 @@ const sc = require('windows-service-controller');
 const Server = require('../models/server');
 
 get_server_state = (req, res) => {
-  sc.query({
+
+  Server.findOne({ _id: req.params.server_id }, (err, server) => {
+    if (err) return res.status(404).json({
+      message: "No server exists with this ID."
+    });
+    sc.query({
       // Specifies a service to query.
-      name: 'Top Hat Engineers', 
+      name: server.name, 
 
       // Specifies what to enumerate and the type. The default type is service.
       class: 'service',
@@ -12,17 +17,27 @@ get_server_state = (req, res) => {
       // Specifies the started state of the service for which to enumerate. 
       // The default state is active.
       state: 'all'
+    })
+    .catch(error => { 
+        error.message === 'The specified service does not exust as an installed service.' 
+        ? res.status(404).json({ message: error.message })
+        : res.status(400).json({ message: error.message })
+        
+    })
+    .done(details => {
+      res.status(200).json(details);
+    });
   })
-  .catch(error => { 
-      console.log(error.message);
-      res.status(400).send(error);
-  })
-  .done(details => {
-    res.status(200).json(details);
-  });
 };
 
 start_server = (req, res) => {
+
+  Server.findOne({ _id: req.params.server_id }, (err, server) => {
+    if (err) return res.status(404).json({
+      message: "No server exists with this ID."
+    });
+  })
+
   sc.timeout(120);
   sc.pollInterval(5);
   sc.start('Top Hat Engineers')
@@ -86,7 +101,7 @@ create_server = (req, res) => {
 list_servers = (req, res) => {
 
   Server.find({}, (err, servers) => {
-      if (err) return res.status(500).send("There was a finding servers from the database.");
+      if (err) return res.status(500).send("There was a problem finding servers from the database.");
       res.status(200).send(servers.map(server => ({
           id: server._id,
           name: server.name,

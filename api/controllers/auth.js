@@ -16,13 +16,8 @@ exports.posts = (req, res) => {
 
 exports.login = (req, res) => {
 
-    console.log('LOGIN')
-
     User.findOne({ name: req.body.name }, '_id name email password', (err, user) => {
         if (err) return res.status(503).send(err)
-
-        console.log('user', user)
-        console.log(req.body.password, user.password)
 
         userData = {
             id: user._id,

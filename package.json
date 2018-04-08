@@ -1,6 +1,6 @@
 {
   "name": "monocle",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "A program controller with a RESTfull API frontend",
   "main": "index.js",
   "scripts": {

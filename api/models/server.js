@@ -6,6 +6,9 @@ const Server = mongoose.model('Server', {
         required: true,
         unique: true
     },
+    serviceName: {
+        type: String,
+    },
     address: {
         type: String,
         required: true
