@@ -9,4 +9,8 @@ router.get('/:server_id', serverController.get_server_state)
 
 router.post('/create', serverController.create_server)
 
+router.put('/update/:server_id', serverController.update_server)
+
+router.delete('/delete/:server_id', serverController.delete_server)
+
 module.exports = router
