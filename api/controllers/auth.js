@@ -16,14 +16,16 @@ exports.posts = (req, res) => {
 
 exports.login = (req, res) => {
 
-    User.findOne({ name: req.body.name }, '_id name email password', (err, user) => {
+    User.findOne({ name: req.body.name }, '_id name email password admin', (err, user) => {
         if (err) return res.status(503).send(err)
 
-        userData = {
+        let userData = {
             id: user._id,
             name: user.name,
             email: user.email
         }
+
+        if (user.admin) userData.admin = user.admin
 
         bcrypt.compare(req.body.password, user.password, (err, passRes) => {
             if (passRes) {

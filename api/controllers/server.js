@@ -156,7 +156,6 @@ delete_server = (req, res) => {
   })
 }
 
-
 module.exports = {
   get_server_state,
   start_server,
