@@ -134,12 +134,12 @@ update_server = (req, res) => {
   Server.findByIdAndUpdate(req.params.server_id, req.body, (err, server) => {
       if (err) return res.status(500).send("There was a problem updating the server.");
       
-      res.status(200).send({
+      res.status(200).json({
           id: server._id,
-          name: server.name,
-          serviceName: server.serviceName || server.name,
-          address: server.address,
-          port: server.port
+          name: req.body.name || server.name,
+          serviceName: req.body.serviceName || server.serviceName || server.name,
+          address: req.body.address || server.address,
+          port: req.body.port || server.port
       });
   })
 }

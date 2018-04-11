@@ -8,4 +8,10 @@ module.exports = function (app) {
     app.use('/servers', verifyToken, checkIfAdmin, serverRoutes)
     app.use('/auth', authRoutes)
     app.use('/users', userRoutes)
+
+    app.use((req, res) => {
+        res.status(404).send({
+            message: 'Not found'
+        });
+    });
 }
